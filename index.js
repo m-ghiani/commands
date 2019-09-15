@@ -3,6 +3,7 @@ let express = require('express');
 let fs = require('fs');
 let path = require('path');
 let net = require('net');
+let dgram = require('dgram');
 
 let app = express();
 const plugins_dir = './plugins';
@@ -51,7 +52,7 @@ app.get('/command/:type/:name', function(req, res) {
 
 app.get('/SendCommand/:server/:command', function(req, res) {
 	var server = servers.filter(function(server) {
-        if (server.name == req.params.server) return true;
+		if (server.name == req.params.server) return true;
 	})[0];
 	if (server) {
 		var plugin = plugins.filter(function(plugin) {
@@ -62,12 +63,24 @@ app.get('/SendCommand/:server/:command', function(req, res) {
 				if (command.name == req.params.command) return true;
 			})[0];
 			if (command) {
-				var client = new net.Socket();
-				client.connect(server.port, server.host, function() {
-					console.log('Connected');
-					client.write(command);
-					res.json({ 'command': command });
-				});
+				switch (server.communication) {
+					case 'tcp':
+						let tcpclient = new net.Socket();
+						tcpclient.connect(server.port, server.host, function() {
+							console.log('Connected');
+							tcpclient.write(command);
+							res.json({ command: command });
+						});
+						break;
+					case 'udp':
+                            let udpclient = dgram.createSocket('udp4');
+                            udpclient.send(command, 0, command.length, server.port, server.host, function(err, bytes) {
+                              if (err) throw err;
+                              res.json({ error: 'communication error' });
+                              udpclient.close();
+                            });
+						break;
+				}
 			} else {
 				res.json({ error: 'command not found' });
 			}

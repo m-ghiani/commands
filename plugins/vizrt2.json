@@ -1,0 +1,13 @@
+{
+    "name": "Vizrt2",
+    "communication_method": "udp",
+    "use_timelines": true,
+    "commands": [
+        {"name": "get_timelines", "value":"comando timelines"},
+        {"name": "play", "value":"comando play"},
+        {"name": "stop", "value":"comando stop"},
+        {"name": "pause", "value":"comando pause"},
+        {"name": "continue", "value":"comando continue"},
+        {"name": "cue", "value":"comando cue"}
+    ]
+}

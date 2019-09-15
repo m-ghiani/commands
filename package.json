@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm start"
+    "start": "node ./app.js",
+    "dev": "nodemon ./app.js"
   },
   "author": "massimo ghiani (m.ghiani@gmail.com)",
   "license": "ISC",

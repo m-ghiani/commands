@@ -1,0 +1,7 @@
+{
+    "name":"Engine1",
+    "description":"Engine 1",
+    "host":"localhost",
+    "port":6100,
+    "type":"Vizrt"
+}
